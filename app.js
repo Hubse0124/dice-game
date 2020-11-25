@@ -12,14 +12,21 @@ var roundScore = 0;
 
 // ШООНЫ АЛЬ ТАЛААРАА БУУСНЫГ ЭНЭ ХАДГАЛАХ ХУВЬСАГЧ ХЭРЭГТЭЙ 1-6 ГЭСЭН УТГЫГ ЭНЭ ХУВЬСАГЧИД САНАМСАРГҮЙГЭЭР ҮҮСГЭЖ ӨГНӨ
 
-var dice = Math.floor(Math.random() * 6) + 1;
-
-console.log("Шоо:" + dice);
+var diceNumber = Math.floor(Math.random() * 6) + 1;
 
 // preparation of program
-document.querySelector("#score-0").textContent = 0;
-document.querySelector("#score-1").textContent = 0;
+document.getElementById("score-0").textContent = "0";
+document.getElementById("score-1").textContent = "0";
 
-document.querySelector("#current-0").textContent = 0;
-document.querySelector("#current-1").textContent = 0;
-document.querySelector(".dice").style.display = "none";
+document.getElementById("current-0").textContent = "0";
+document.getElementById("current-1").textContent = "0";
+
+var diceDom = document.querySelector(".dice");
+diceDom.style.display = "none";
+document.querySelector(".btn-roll").addEventListener("click", function () {
+  var diceNumber = Math.floor(Math.random() * 6) + 1;
+  //   alert("shoo: " + diceNumber);
+
+  diceDom.style.display = "block";
+  diceDom.src = "dice-" + diceNumber + ".png";
+});
