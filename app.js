@@ -1,32 +1,99 @@
-// Тоглогчийн ээлжийг хадгалах хувьсагч, нэгдүгээр тоглогчийг 0, Хоёрдугаар тоглогчийг 1 гэж тэмвэглэе.
+var activePlayer;
+var scores;
+var roundScore;
 
-var activePlayer = 1;
-
-// TOGLOGCHDIIN TSUGLUULSAN ONOOG HADGALAAH HUVISAGCH
-
-var scores = [0, 0];
-
-// TOGLOGCHIIN EELJIND AVSAN ONOO
-
-var roundScore = 0;
-
-// ШООНЫ АЛЬ ТАЛААРАА БУУСНЫГ ЭНЭ ХАДГАЛАХ ХУВЬСАГЧ ХЭРЭГТЭЙ 1-6 ГЭСЭН УТГЫГ ЭНЭ ХУВЬСАГЧИД САНАМСАРГҮЙГЭЭР ҮҮСГЭЖ ӨГНӨ
-
-var diceNumber = Math.floor(Math.random() * 6) + 1;
-
-// preparation of program
-document.getElementById("score-0").textContent = "0";
-document.getElementById("score-1").textContent = "0";
-
-document.getElementById("current-0").textContent = "0";
-document.getElementById("current-1").textContent = "0";
+// Тоглогчийн ээлжийг хадгалах хувьсагч, нэгдүгээр тоглогчийг 0, Хоёрдугаар тоглогчийг 1 гэж тэмвэглэx.
 
 var diceDom = document.querySelector(".dice");
-diceDom.style.display = "none";
+
+initGame();
+
+function initGame() {
+  activePlayer = 0;
+
+  // TOGLOGCHDIIN TSUGLUULSAN ONOOG HADGALAAH HUVISAGCH
+
+  scores = [0, 0];
+
+  // TOGLOGCHIIN EELJIND AVSAN ONOO
+
+  roundScore = 0;
+
+  // preparation of program
+  document.getElementById("score-0").textContent = "0";
+  document.getElementById("score-1").textContent = "0";
+  document.getElementById("current-0").textContent = "0";
+  document.getElementById("current-1").textContent = "0";
+
+  // winner arilgaj shineer ehluuleh
+  document.getElementById("name-0").textContent = "Player 1";
+  document.getElementById("name-1").textContent = "Player 2";
+  document.querySelector(".player-0-panel").classList.remove("winner");
+  document.querySelector(".player-1-panel").classList.remove("winner");
+
+  document.querySelector(".player-1-panel").classList.remove("active");
+  document.querySelector(".player-1-panel").classList.remove("active");
+  document.querySelector(".player-1-panel").classList.add("active");
+
+  diceDom.style.display = "none";
+}
+
 document.querySelector(".btn-roll").addEventListener("click", function () {
   var diceNumber = Math.floor(Math.random() * 6) + 1;
-  //   alert("shoo: " + diceNumber);
-
   diceDom.style.display = "block";
   diceDom.src = "dice-" + diceNumber + ".png";
+
+  if (diceNumber !== 1) {
+    roundScore = roundScore + diceNumber;
+    document.getElementById("current-" + activePlayer).textContent = roundScore;
+  } else {
+    switchToNextPlayer();
+  }
+});
+// HOLD товчны EventListener
+document.querySelector(".btn-hold").addEventListener("click", function () {
+  // players  round score add to main score
+
+  scores[activePlayer] = scores[activePlayer] + roundScore;
+  document.getElementById("score-" + activePlayer).textContent =
+    scores[activePlayer];
+  // ug toglogch hojson vgvig shalgah (100-s ih eseh)
+  if (scores[activePlayer] >= 10) {
+    //yalagch gesen textiig nerniih n orond gargana
+    document.getElementById("name-" + activePlayer).textContent = "WINNER!!!";
+    document
+      .querySelector(".player-" + activePlayer + "-panel")
+      .classList.add("winner");
+    document
+      .querySelector(".player-" + activePlayer + "-panel")
+      .classList.remove("active");
+  } else {
+    switchToNextPlayer();
+  }
+  // displays main score
+
+  //current number gets 0
+
+  //changes players turn
+});
+
+function switchToNextPlayer() {
+  roundScore = 0;
+  document.getElementById("current-" + activePlayer).textContent = 0;
+
+  activePlayer === 0 ? (activePlayer = 1) : (activePlayer = 0);
+  // if (activePlayer === 0) {
+  //   activePlayer = 1;
+  // } else {
+  //   activePlayer = 0;
+  // }
+  document.querySelector(".player-0-panel").classList.toggle("active");
+  document.querySelector(".player-1-panel").classList.toggle("active");
+
+  diceDom.style.display = "none";
+}
+
+// shine togloom ehluuleh tovchnii event listener
+document.querySelector(".btn-new").addEventListener("click", function () {
+  initGame();
 });
