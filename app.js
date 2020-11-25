@@ -1,3 +1,7 @@
+// togloom duussan esehiig hadgalah tuluviin huvisagch
+var isNewGame;
+
+// global variables
 var activePlayer;
 var scores;
 var roundScore;
@@ -9,6 +13,8 @@ var diceDom = document.querySelector(".dice");
 initGame();
 
 function initGame() {
+  isNewGame = true;
+
   activePlayer = 0;
 
   // TOGLOGCHDIIN TSUGLUULSAN ONOOG HADGALAAH HUVISAGCH
@@ -31,49 +37,61 @@ function initGame() {
   document.querySelector(".player-0-panel").classList.remove("winner");
   document.querySelector(".player-1-panel").classList.remove("winner");
 
+  document.querySelector(".player-0-panel").classList.remove("active");
   document.querySelector(".player-1-panel").classList.remove("active");
-  document.querySelector(".player-1-panel").classList.remove("active");
-  document.querySelector(".player-1-panel").classList.add("active");
+  document.querySelector(".player-0-panel").classList.add("active");
 
   diceDom.style.display = "none";
 }
 
+// shoog shideh event listener
 document.querySelector(".btn-roll").addEventListener("click", function () {
-  var diceNumber = Math.floor(Math.random() * 6) + 1;
-  diceDom.style.display = "block";
-  diceDom.src = "dice-" + diceNumber + ".png";
+  if (isNewGame) {
+    var diceNumber = Math.floor(Math.random() * 6) + 1;
+    diceDom.style.display = "block";
+    diceDom.src = "dice-" + diceNumber + ".png";
 
-  if (diceNumber !== 1) {
-    roundScore = roundScore + diceNumber;
-    document.getElementById("current-" + activePlayer).textContent = roundScore;
+    if (diceNumber !== 1) {
+      roundScore = roundScore + diceNumber;
+      document.getElementById(
+        "current-" + activePlayer
+      ).textContent = roundScore;
+    } else {
+      switchToNextPlayer();
+    }
   } else {
-    switchToNextPlayer();
+    alert("Click New Game button");
   }
 });
 // HOLD товчны EventListener
 document.querySelector(".btn-hold").addEventListener("click", function () {
-  // players  round score add to main score
+  if (isNewGame) {
+    // players  round score add to main score
 
-  scores[activePlayer] = scores[activePlayer] + roundScore;
-  document.getElementById("score-" + activePlayer).textContent =
-    scores[activePlayer];
-  // ug toglogch hojson vgvig shalgah (100-s ih eseh)
-  if (scores[activePlayer] >= 10) {
-    //yalagch gesen textiig nerniih n orond gargana
-    document.getElementById("name-" + activePlayer).textContent = "WINNER!!!";
-    document
-      .querySelector(".player-" + activePlayer + "-panel")
-      .classList.add("winner");
-    document
-      .querySelector(".player-" + activePlayer + "-panel")
-      .classList.remove("active");
+    scores[activePlayer] = scores[activePlayer] + roundScore;
+    document.getElementById("score-" + activePlayer).textContent =
+      scores[activePlayer];
+    // ug toglogch hojson vgvig shalgah (100-s ih eseh)
+    if (scores[activePlayer] >= 10) {
+      // togloomiig duussan tuluvt oruulna
+      isNewGame = false;
+      //yalagch gesen textiig nerniih n orond gargana
+      document.getElementById("name-" + activePlayer).textContent = "WINNER!!!";
+      document
+        .querySelector(".player-" + activePlayer + "-panel")
+        .classList.add("winner");
+      document
+        .querySelector(".player-" + activePlayer + "-panel")
+        .classList.remove("active");
+    } else {
+      switchToNextPlayer();
+    }
   } else {
-    switchToNextPlayer();
+    alert("click new game");
   }
+
   // displays main score
-
   //current number gets 0
-
   //changes players turn
 });
 
